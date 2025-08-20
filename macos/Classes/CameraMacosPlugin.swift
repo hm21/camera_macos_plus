@@ -809,7 +809,7 @@ public class CameraMacosPlugin: NSObject, FlutterPlugin, FlutterTexture, AVCaptu
                         // audio buffering output
                         if shouldRecordAudio {
                             if let audioOutput = self.captureSession.outputs.first(where: { $0 is AVCaptureAudioDataOutput }) as? AVCaptureAudioDataOutput {
-                                videoOutput.setSampleBufferDelegate(self, queue: .main)
+                               audioOutput.setSampleBufferDelegate(self, queue: .main)
                             }
                         }
                         
