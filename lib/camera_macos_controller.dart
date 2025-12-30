@@ -73,6 +73,11 @@ class CameraMacOSController {
     await _platformInstance.setFocusPoint(point);
   }
 
+  /// Set a new exposure point in the image
+  Future<void> setExposurePoint(Offset point) async {
+    await _platformInstance.setExposurePoint(point);
+  }
+
   Future<void> setZoomLevel(double zoom) async {
     await _platformInstance.setZoomLevel(zoom);
   }
@@ -83,6 +88,16 @@ class CameraMacOSController {
 
   Future<void> setVideoMirrored(bool isVideoMirrored) async {
     await _platformInstance.setVideoMirrored(isVideoMirrored);
+  }
+
+  /// Check if the current camera has flash/torch support
+  Future<bool> hasFlash({String? deviceId}) async {
+    return await _platformInstance.hasFlash(deviceId: deviceId);
+  }
+
+  /// Get camera aspect ratio
+  Future<double?> getAspectRatio({String? deviceId}) async {
+    return await _platformInstance.getAspectRatio(deviceId: deviceId);
   }
 
   /// Getter that checks if a video is currently recording

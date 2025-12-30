@@ -158,6 +158,19 @@ public class CameraMacosPlugin: NSObject, FlutterPlugin, FlutterTexture, AVCaptu
                 return
             }
             setFocusPoint(arguments, result)
+        case "setExposurePoint":
+            guard let arguments = call.arguments as? Dictionary<String, Any>
+            else {
+                result(FlutterError(code: "INVALID_ARGS", message: "", details: nil).toMap)
+                return
+            }
+            setExposurePoint(arguments, result)
+        case "hasFlash":
+            let arguments = call.arguments as? Dictionary<String, Any> ?? [:]
+            hasFlash(arguments, result)
+        case "getAspectRatio":
+            let arguments = call.arguments as? Dictionary<String, Any> ?? [:]
+            getAspectRatio(arguments, result)
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -194,6 +207,63 @@ public class CameraMacosPlugin: NSObject, FlutterPlugin, FlutterTexture, AVCaptu
         }
         else{
             result(["error": FlutterError(code: "SET_FOCUSPOINT_ERROR", message: "This device does not have focuspoint support.", details: nil).toMap])
+        }
+    }
+
+    func setExposurePoint(_ arguments: Dictionary<String, Any>, _ result: @escaping FlutterResult) {
+        let x = arguments["x"] as! Double;
+        let y = arguments["y"] as! Double;
+
+        let exposurePoint: CGPoint = .init(x: x, y: y)
+        if videoDevice.isExposurePointOfInterestSupported {
+            videoDevice.exposurePointOfInterest = exposurePoint
+            videoDevice.unlockForConfiguration()
+            result(nil)
+        }
+        else{
+            result(["error": FlutterError(code: "SET_EXPOSUREPOINT_ERROR", message: "This device does not have exposure point support.", details: nil).toMap])
+        }
+    }
+
+    func hasFlash(_ arguments: Dictionary<String, Any>, _ result: @escaping FlutterResult) {
+        var device: AVCaptureDevice? = videoDevice
+        
+        if let deviceId = arguments["deviceId"] as? String {
+            var capturedVideoDevices: [AVCaptureDevice] = []
+            if #available(macOS 10.15, *) {
+                capturedVideoDevices = AVCaptureDevice.captureDevices(deviceTypes: [.builtInWideAngleCamera, .externalUnknown], mediaType: .video)
+            } else {
+                capturedVideoDevices = AVCaptureDevice.captureDevices(mediaType: .video)
+            }
+            device = capturedVideoDevices.first(where: { $0.uniqueID == deviceId })
+        }
+        
+        if let device = device {
+            result(device.hasTorch)
+        } else {
+            result(false)
+        }
+    }
+
+    func getAspectRatio(_ arguments: Dictionary<String, Any>, _ result: @escaping FlutterResult) {
+        var device: AVCaptureDevice? = videoDevice
+        
+        if let deviceId = arguments["deviceId"] as? String {
+            var capturedVideoDevices: [AVCaptureDevice] = []
+            if #available(macOS 10.15, *) {
+                capturedVideoDevices = AVCaptureDevice.captureDevices(deviceTypes: [.builtInWideAngleCamera, .externalUnknown], mediaType: .video)
+            } else {
+                capturedVideoDevices = AVCaptureDevice.captureDevices(mediaType: .video)
+            }
+            device = capturedVideoDevices.first(where: { $0.uniqueID == deviceId })
+        }
+        
+        if let device = device {
+            let dimensions = CMVideoFormatDescriptionGetDimensions(device.activeFormat.formatDescription)
+            let aspectRatio = Double(dimensions.width) / Double(dimensions.height)
+            result(["aspectRatio": aspectRatio])
+        } else {
+            result(nil)
         }
     }
 

@@ -79,6 +79,10 @@ abstract class CameraMacOSPlatform extends PlatformInterface {
     throw UnimplementedError('');
   }
 
+  Future<void> setExposurePoint(Offset point) {
+    throw UnimplementedError('');
+  }
+
   Future<void> setZoomLevel(double zoom) {
     throw UnimplementedError('');
   }

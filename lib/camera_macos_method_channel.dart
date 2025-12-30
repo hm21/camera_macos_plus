@@ -342,6 +342,20 @@ class MethodChannelCameraMacOS extends CameraMacOSPlatform {
   }
 
   @override
+  Future<void> setExposurePoint(Offset point) {
+    assert(point.dx >= 0 && point.dx <= 1);
+    assert(point.dy >= 0 && point.dy <= 1);
+
+    return methodChannel.invokeMethod<void>(
+      'setExposurePoint',
+      <String, dynamic>{
+        'x': point.dx,
+        'y': point.dy,
+      },
+    );
+  }
+
+  @override
   Future<void> setZoomLevel(double zoom) {
     assert(zoom >= 0 && zoom <= 10.0);
 

@@ -107,6 +107,11 @@ class MockCameraMacOSPlatform
   Future<bool> hasFlash({String? deviceId}) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<void> setExposurePoint(Offset point) {
+    throw UnimplementedError();
+  }
 }
 
 void main() {
