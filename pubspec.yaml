@@ -1,7 +1,17 @@
-name: camera_macos
+name: camera_macos_plus
 description: macOS camera package implementation. Supports both internal and external cameras, can take pictures and record video with audio as well.
-version: 0.0.9
-repository: https://github.com/riccardo-lomazzi/camera_macos
+version: 0.0.1
+homepage: https://github.com/hm21/camera_macos_plus/
+repository: https://github.com/hm21/camera_macos_plus/
+documentation: https://github.com/hm21/camera_macos_plus/
+funding:
+  - https://github.com/sponsors/hm21
+
+topics:
+  - camera
+  - video-recorder
+  - recorder
+  - picture
 
 environment:
   sdk: '>=2.18.2 <4.0.0'
@@ -10,7 +20,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  plugin_platform_interface: ^2.0.3
+  plugin_platform_interface: ^2.1.8
 
 dev_dependencies:
   flutter_test:

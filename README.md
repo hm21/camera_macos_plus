@@ -1,7 +1,10 @@
+> **Note:** This package is forked from [camera_macos](https://pub.dev/packages/camera_macos) and is maintained independently for continued support and updates.
+
 # Camera macOS
 
 Implementation of ```AVKit``` camera for ```macOS```.
 Can take pictures and record videos, even with external cameras.
+
 
 ## Getting Started
 
