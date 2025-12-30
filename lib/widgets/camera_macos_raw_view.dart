@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class CameraMacosRawView extends StatelessWidget {
-  const CameraMacosRawView({
+class CameraMacOSRawView extends StatelessWidget {
+  const CameraMacOSRawView({
     super.key,
     this.usePlatformView = false,
     this.cameraSize,
