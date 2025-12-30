@@ -24,7 +24,20 @@ extension AVCaptureDevice {
     
     public class func captureDevice(mediaType: AVMediaType) -> AVCaptureDevice? {
         if #available(macOS 10.15, *) {
-            let deviceTypes: [AVCaptureDevice.DeviceType] = [.builtInWideAngleCamera, .externalUnknown]
+            let deviceTypes: [AVCaptureDevice.DeviceType]
+            if mediaType == .audio {
+                if #available(macOS 14.0, *) {
+                    deviceTypes = [.microphone, .external]
+                } else {
+                    deviceTypes = [.builtInMicrophone, .externalUnknown]
+                }
+            } else {
+                if #available(macOS 14.0, *) {
+                    deviceTypes = [.builtInWideAngleCamera, .external]
+                } else {
+                    deviceTypes = [.builtInWideAngleCamera, .externalUnknown]
+                }
+            }
             return AVCaptureDevice.DiscoverySession(deviceTypes: deviceTypes, mediaType: mediaType, position: .unspecified).devices.first
         } else {
             return AVCaptureDevice.default(for: mediaType)
@@ -33,7 +46,20 @@ extension AVCaptureDevice {
     
     public class func captureDevices(mediaType: AVMediaType? = nil) -> [AVCaptureDevice] {
         if #available(macOS 10.15, *) {
-            let deviceTypes: [AVCaptureDevice.DeviceType] = [.builtInWideAngleCamera, .externalUnknown]
+            let deviceTypes: [AVCaptureDevice.DeviceType]
+            if mediaType == .audio {
+                if #available(macOS 14.0, *) {
+                    deviceTypes = [.microphone, .external]
+                } else {
+                    deviceTypes = [.builtInMicrophone, .externalUnknown]
+                }
+            } else {
+                if #available(macOS 14.0, *) {
+                    deviceTypes = [.builtInWideAngleCamera, .external]
+                } else {
+                    deviceTypes = [.builtInWideAngleCamera, .externalUnknown]
+                }
+            }
             return AVCaptureDevice.DiscoverySession(deviceTypes: deviceTypes, mediaType: mediaType, position: .unspecified).devices
         } else {
             if let mediaType = mediaType {
