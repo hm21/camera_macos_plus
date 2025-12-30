@@ -141,8 +141,12 @@ public class CameraMacosPlugin: NSObject, FlutterPlugin, FlutterTexture, AVCaptu
         case "stopRecording":
             stopRecording(result)
         case "setZoom":
-            let arguments = call.arguments as? Dictionary<String, Any> ?? [:]
-            zoomLevel = arguments["zoom"] as? Double ?? 1.0
+            guard let arguments = call.arguments as? Dictionary<String, Any>
+            else {
+                result(FlutterError(code: "INVALID_ARGS", message: "", details: nil).toMap)
+                return
+            }
+            setZoom(arguments, result)
         case "setOrientation":
             let arguments = call.arguments as? Dictionary<String, Any> ?? [:]
             orientation = arguments["orientation"] as? Double ?? 0
@@ -222,6 +226,22 @@ public class CameraMacosPlugin: NSObject, FlutterPlugin, FlutterTexture, AVCaptu
         }
         else{
             result(["error": FlutterError(code: "SET_EXPOSUREPOINT_ERROR", message: "This device does not have exposure point support.", details: nil).toMap])
+        }
+    }
+
+    func setZoom(_ arguments: Dictionary<String, Any>, _ result: @escaping FlutterResult) {
+        let zoom = arguments["zoom"] as? Double ?? 1.0
+        zoomLevel = zoom
+        
+        do {
+            try videoDevice.lockForConfiguration()
+            let maxZoom = videoDevice.activeFormat.videoMaxZoomFactor
+            let newZoom = min(max(zoom, 1.0), Double(maxZoom))
+            videoDevice.videoZoomFactor = CGFloat(newZoom)
+            videoDevice.unlockForConfiguration()
+            result(nil)
+        } catch {
+            result(FlutterError(code: "SET_ZOOM_ERROR", message: error.localizedDescription, details: nil).toFlutterResult)
         }
     }
 
