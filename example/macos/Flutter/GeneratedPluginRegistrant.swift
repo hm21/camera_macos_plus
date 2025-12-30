@@ -5,7 +5,7 @@
 import FlutterMacOS
 import Foundation
 
-import camera_macos
+import camera_macos_plus
 import path_provider_foundation
 import url_launcher_macos
 

@@ -1,7 +1,10 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:typed_data';
 
-import 'package:camera_macos/camera_macos_device.dart';
 import 'package:flutter/material.dart';
+
+import 'camera_macos_device.dart';
 
 enum PictureFormat { jpg, jpeg, tiff, bmp, png, raw }
 
@@ -106,6 +109,13 @@ class CameraImageData {
 }
 
 class CameraMacOSArguments {
+  /// Create a [CameraMacOSArguments].
+  CameraMacOSArguments({
+    this.textureId,
+    required this.size,
+    this.devices,
+  });
+
   /// The texture id.
   final int? textureId;
 
@@ -114,11 +124,4 @@ class CameraMacOSArguments {
 
   /// Chosen device
   final List<CameraMacOSDevice>? devices;
-
-  /// Create a [CameraMacOSArguments].
-  CameraMacOSArguments({
-    this.textureId,
-    required this.size,
-    this.devices,
-  });
 }

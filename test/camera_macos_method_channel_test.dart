@@ -1,7 +1,7 @@
-import 'package:camera_macos/camera_macos_arguments.dart';
-import 'package:camera_macos/camera_macos_file.dart';
-import 'package:camera_macos/camera_macos_method_channel.dart';
-import 'package:camera_macos/exceptions.dart';
+import 'package:camera_macos_plus/camera_macos_arguments.dart';
+import 'package:camera_macos_plus/camera_macos_file.dart';
+import 'package:camera_macos_plus/camera_macos_method_channel.dart';
+import 'package:camera_macos_plus/exceptions.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -14,11 +14,11 @@ void main() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(channel, (MethodCall methodCall) async {
       switch (methodCall.method) {
-        case "onVideoRecordingFinished":
+        case 'onVideoRecordingFinished':
           dynamic args = methodCall.arguments;
           expect(args, isNot(null));
           expect(args, isA<Map<String, dynamic>>());
-          expect(args["videoData"], isA<Uint8List>());
+          expect(args['videoData'], isA<Uint8List>());
           break;
         default:
           break;
@@ -28,7 +28,7 @@ void main() {
   });
 
   test(
-    "initialize camera picture",
+    'initialize camera picture',
     () async {
       CameraMacOSArguments? macOSArguments = await platform.initialize(
         cameraMacOSMode: CameraMacOSMode.photo,
@@ -41,7 +41,7 @@ void main() {
   );
 
   test(
-    "initialize camera video",
+    'initialize camera video',
     () async {
       CameraMacOSArguments? macOSArguments = await platform.initialize(
         cameraMacOSMode: CameraMacOSMode.video,
@@ -54,7 +54,7 @@ void main() {
   );
 
   test(
-    "take picture",
+    'take picture',
     () async {
       CameraMacOSArguments? macOSArguments = await platform.initialize(
         cameraMacOSMode: CameraMacOSMode.photo,
@@ -71,7 +71,7 @@ void main() {
   );
 
   test(
-    "record short video",
+    'record short video',
     () async {
       CameraMacOSArguments? macOSArguments = await platform.initialize(
         cameraMacOSMode: CameraMacOSMode.video,
@@ -94,7 +94,7 @@ void main() {
   );
 
   test(
-    "record video and stop",
+    'record video and stop',
     () async {
       CameraMacOSArguments? macOSArguments = await platform.initialize(
         cameraMacOSMode: CameraMacOSMode.video,
@@ -118,7 +118,7 @@ void main() {
   );
 
   test(
-    "destroy",
+    'destroy',
     () async {
       CameraMacOSArguments? macOSArguments = await platform.initialize(
         cameraMacOSMode: CameraMacOSMode.video,

@@ -1,14 +1,14 @@
-import 'package:camera_macos/camera_macos_arguments.dart';
-import 'package:camera_macos/camera_macos_file.dart';
-import 'package:camera_macos/camera_macos_method_channel.dart';
-import 'package:camera_macos/camera_macos_platform_interface.dart';
-import 'package:camera_macos/exceptions.dart';
 import 'package:flutter/services.dart';
 
-class CameraMacOSController {
-  late CameraMacOSArguments args;
+import 'camera_macos_arguments.dart';
+import 'camera_macos_file.dart';
+import 'camera_macos_method_channel.dart';
+import 'camera_macos_platform_interface.dart';
+import 'exceptions.dart';
 
+class CameraMacOSController {
   CameraMacOSController(this.args);
+  late CameraMacOSArguments args;
 
   CameraMacOSPlatform get _platformInstance => CameraMacOSPlatform.instance;
 
@@ -28,7 +28,8 @@ class CameraMacOSController {
     /// Enable audio (this flag overrides the initialization setting)
     bool? enableAudio,
 
-    /// Called only when the video has reached the max duration pointed by maxVideoDuration
+    /// Called only when the video has reached the max duration pointed by
+    /// maxVideoDuration
     Function(CameraMacOSFile?, CameraMacOSException?)? onVideoRecordingFinished,
   }) {
     return _platformInstance.startVideoRecording(
@@ -51,7 +52,7 @@ class CameraMacOSController {
 
   /// Turn light on
   Future<void> toggleTorch(Torch torch) async {
-    _platformInstance.toggleTorch(torch);
+    await _platformInstance.toggleTorch(torch);
   }
 
   /// Stream current argb image
@@ -59,36 +60,37 @@ class CameraMacOSController {
     void Function(CameraImageData?) onAvailable, {
     void Function(dynamic)? onError,
   }) async {
-    _platformInstance.startImageStream(onAvailable);
+    await _platformInstance.startImageStream(onAvailable);
   }
 
   /// Stop the image from streaming
   Future<void> stopImageStream() async {
-    _platformInstance.stopImageStream();
+    await _platformInstance.stopImageStream();
   }
 
   /// Set a new focus point in the image
   Future<void> setFocusPoint(Offset point) async {
-    _platformInstance.setFocusPoint(point);
+    await _platformInstance.setFocusPoint(point);
   }
 
   Future<void> setZoomLevel(double zoom) async {
-    _platformInstance.setZoomLevel(zoom);
+    await _platformInstance.setZoomLevel(zoom);
   }
 
   Future<void> setOrientation(CameraOrientation orientation) async {
-    _platformInstance.setOrientation(orientation);
+    await _platformInstance.setOrientation(orientation);
   }
 
   Future<void> setVideoMirrored(bool isVideoMirrored) async {
-    _platformInstance.setVideoMirrored(isVideoMirrored);
+    await _platformInstance.setVideoMirrored(isVideoMirrored);
   }
 
   /// Getter that checks if a video is currently recording
   bool get isRecording =>
       (_platformInstance as MethodChannelCameraMacOS).isRecording;
 
-  /// Getter that checks if a camera instance has been destroyed or not initiliazed yet.
+  /// Getter that checks if a camera instance has been destroyed or not
+  /// initiliazed yet.
   bool get isDestroyed =>
       (_platformInstance as MethodChannelCameraMacOS).isDestroyed;
 

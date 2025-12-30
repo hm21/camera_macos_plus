@@ -1,12 +1,33 @@
-import 'package:camera_macos/camera_macos_arguments.dart';
-import 'package:camera_macos/camera_macos_controller.dart';
-import 'package:camera_macos/camera_macos_method_channel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'camera_macos_platform_interface.dart';
+import '../camera_macos_arguments.dart';
+import '../camera_macos_controller.dart';
+import '../camera_macos_method_channel.dart';
+import '../camera_macos_platform_interface.dart';
 
 class CameraMacOSView extends StatefulWidget {
+  const CameraMacOSView({
+    super.key,
+    this.deviceId,
+    this.audioDeviceId,
+    this.enableAudio = true,
+    this.fit = BoxFit.contain,
+    required this.cameraMode,
+    required this.onCameraInizialized,
+    this.onCameraLoading,
+    this.onCameraDestroyed,
+    this.usePlatformView = false,
+    this.resolution = PictureResolution.max,
+    this.audioQuality = AudioQuality.max,
+    this.pictureFormat = PictureFormat.tiff,
+    this.videoFormat = VideoFormat.mp4,
+    this.audioFormat = AudioFormat.kAudioFormatAppleLossless,
+    this.toggleTorch = Torch.off,
+    this.orientation = CameraOrientation.orientation0deg,
+    this.isVideoMirrored = true,
+  });
+
   /// Handles how the widget should fit the screen.
   final BoxFit fit;
 
@@ -16,22 +37,26 @@ class CameraMacOSView extends StatefulWidget {
   /// Audio DeviceId of the audio streaming device
   final String? audioDeviceId;
 
-  /// Enable audio while recording video. Defaults to 'true'. You can always override this setting when calling the 'startRecording' method.
+  /// Enable audio while recording video. Defaults to 'true'. You can always
+  /// override this setting when calling the 'startRecording' method.
   final bool enableAudio;
 
   /// Choose between audio or video mode
   final CameraMacOSMode cameraMode;
 
-  /// Callback that gets called while the "initialize" method hasn't returned a value yet.
+  /// Callback that gets called while the "initialize" method hasn't returned
+  /// a value yet.
   final Widget Function(Object?)? onCameraLoading;
 
-  /// Callback that gets called when the "initialize" method has returned a value.
+  /// Callback that gets called when the "initialize" method has returned a
+  /// value.
   final Function(CameraMacOSController) onCameraInizialized;
 
   /// Callback that gets called when the "destroy" method has returned.
   final Widget Function()? onCameraDestroyed;
 
-  /// [EXPERIMENTAL][NOT WORKING] It won't work until Flutter will officially support macOS Platform Views.
+  /// [EXPERIMENTAL][NOT WORKING] It won't work until Flutter will officially
+  /// support macOS Platform Views.
   final bool usePlatformView;
 
   /// Format of the output photo
@@ -56,27 +81,6 @@ class CameraMacOSView extends StatefulWidget {
   final CameraOrientation orientation;
 
   final bool isVideoMirrored;
-
-  const CameraMacOSView({
-    Key? key,
-    this.deviceId,
-    this.audioDeviceId,
-    this.enableAudio = true,
-    this.fit = BoxFit.contain,
-    required this.cameraMode,
-    required this.onCameraInizialized,
-    this.onCameraLoading,
-    this.onCameraDestroyed,
-    this.usePlatformView = false,
-    this.resolution = PictureResolution.max,
-    this.audioQuality = AudioQuality.max,
-    this.pictureFormat = PictureFormat.tiff,
-    this.videoFormat = VideoFormat.mp4,
-    this.audioFormat = AudioFormat.kAudioFormatAppleLossless,
-    this.toggleTorch = Torch.off,
-    this.orientation = CameraOrientation.orientation0deg,
-    this.isVideoMirrored = true,
-  }) : super(key: key);
 
   @override
   CameraMacOSViewState createState() => CameraMacOSViewState();
@@ -106,7 +110,7 @@ class CameraMacOSViewState extends State<CameraMacOSView> {
     )
         .then((value) {
       if (value != null) {
-        this.arguments = value;
+        arguments = value;
         widget.onCameraInizialized(
           CameraMacOSController(value),
         );
@@ -132,7 +136,7 @@ class CameraMacOSViewState extends State<CameraMacOSView> {
           if (widget.onCameraLoading != null) {
             return widget.onCameraLoading!(null);
           } else {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -156,13 +160,14 @@ class CameraMacOSViewState extends State<CameraMacOSView> {
         double cameraHeight = snapshot.data!.size.height;
 
         final Map<String, dynamic> creationParams = <String, dynamic>{
-          "width": cameraWidth,
-          "height": cameraHeight,
+          'width': cameraWidth,
+          'height': cameraHeight,
         };
+        final screenSize = MediaQuery.sizeOf(context);
         return ClipRect(
           child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
+            width: screenSize.width,
+            height: screenSize.height,
             child: FittedBox(
               fit: widget.fit,
               child: SizedBox(
@@ -176,10 +181,8 @@ class CameraMacOSViewState extends State<CameraMacOSView> {
                   ),
                   child: widget.usePlatformView
                       ? UiKitView(
-                          viewType: "camera_macos_view",
-                          onPlatformViewCreated: (id) {
-                            print(id);
-                          },
+                          viewType: 'camera_macos_view',
+                          onPlatformViewCreated: (id) {},
                           creationParams: creationParams,
                           creationParamsCodec: const StandardMessageCodec(),
                         )
@@ -231,7 +234,7 @@ class CameraMacOSViewState extends State<CameraMacOSView> {
       )
           .then((value) {
         if (value != null) {
-          this.arguments = value;
+          arguments = value;
           widget.onCameraInizialized(
             CameraMacOSController(value),
           );

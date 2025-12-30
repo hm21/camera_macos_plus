@@ -1,11 +1,6 @@
-import 'package:camera_macos/extensions.dart';
+import 'extensions.dart';
 
 class CameraMacOSDevice {
-  String deviceId;
-  String? manufacturer;
-  CameraMacOSDeviceType deviceType;
-  String? localizedName;
-
   CameraMacOSDevice({
     required this.deviceId,
     this.manufacturer,
@@ -19,10 +14,14 @@ class CameraMacOSDevice {
       manufacturer: map['manufacturer'],
       localizedName: map['localizedName'],
       deviceType: CameraMacOSDeviceType.values.safeElementAt(
-              map["deviceType"] ?? CameraMacOSDeviceType.unknown.index) ??
+              map['deviceType'] ?? CameraMacOSDeviceType.unknown.index) ??
           CameraMacOSDeviceType.unknown,
     );
   }
+  String deviceId;
+  String? manufacturer;
+  CameraMacOSDeviceType deviceType;
+  String? localizedName;
 }
 
 enum CameraMacOSDeviceType {

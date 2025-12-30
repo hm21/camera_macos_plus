@@ -1,6 +1,6 @@
 # camera_macos_example
 
-Demonstrates how to use the camera_macos plugin.
+Demonstrates how to use the camera_macos_plus plugin.
 
 ## Getting Started
 

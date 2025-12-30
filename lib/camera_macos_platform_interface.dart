@@ -1,7 +1,7 @@
-import 'package:camera_macos/camera_macos.dart';
 import 'package:flutter/material.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
+import 'camera_macos.dart';
 import 'camera_macos_method_channel.dart';
 
 typedef CameraMacOS = CameraMacOSPlatform;
@@ -41,16 +41,16 @@ abstract class CameraMacOSPlatform extends PlatformInterface {
     bool isVideoMirrored = true,
     required CameraMacOSMode cameraMacOSMode,
   }) {
-    throw UnimplementedError("");
+    throw UnimplementedError('');
   }
 
   Future<List<CameraMacOSDevice>> listDevices(
       {CameraMacOSDeviceType? deviceType}) {
-    throw UnimplementedError("");
+    throw UnimplementedError('');
   }
 
   Future<CameraMacOSFile?> takePicture() {
-    throw UnimplementedError("");
+    throw UnimplementedError('');
   }
 
   Future<bool> startVideoRecording({
@@ -59,43 +59,51 @@ abstract class CameraMacOSPlatform extends PlatformInterface {
     bool? enableAudio,
     Function(CameraMacOSFile?, CameraMacOSException?)? onVideoRecordingFinished,
   }) {
-    throw UnimplementedError("");
+    throw UnimplementedError('');
   }
 
   Future<CameraMacOSFile?> stopVideoRecording() {
-    throw UnimplementedError("");
+    throw UnimplementedError('');
   }
 
   Future<void> startImageStream(void Function(CameraImageData?) onAvailable,
       {void Function(dynamic)? onError}) async {
-    throw UnimplementedError("");
+    throw UnimplementedError('');
   }
 
   Future<void> stopImageStream() async {
-    throw UnimplementedError("");
+    throw UnimplementedError('');
   }
 
   Future<void> setFocusPoint(Offset point) {
-    throw UnimplementedError("");
+    throw UnimplementedError('');
   }
 
   Future<void> setZoomLevel(double zoom) {
-    throw UnimplementedError("");
+    throw UnimplementedError('');
   }
 
   Future<void> setOrientation(CameraOrientation orientation) {
-    throw UnimplementedError("");
+    throw UnimplementedError('');
   }
 
   Future<void> setVideoMirrored(bool isVideoMirrored) {
-    throw UnimplementedError("");
+    throw UnimplementedError('');
   }
 
   Future<void> toggleTorch(Torch torch) {
-    throw UnimplementedError("");
+    throw UnimplementedError('');
   }
 
   Future<bool?> destroy() {
-    throw UnimplementedError("");
+    throw UnimplementedError('');
+  }
+
+  Future<bool> hasFlash({String? deviceId}) {
+    throw UnimplementedError('');
+  }
+
+  Future<double?> getAspectRatio({String? deviceId}) {
+    throw UnimplementedError('');
   }
 }

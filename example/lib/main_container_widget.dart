@@ -1,13 +1,17 @@
 import 'dart:io';
-import 'package:camera_macos/camera_macos.dart';
-import 'package:camera_macos_example/input_image.dart';
+
+import 'package:camera_macos_plus/camera_macos.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as pathJoiner;
 import 'package:url_launcher/url_launcher.dart';
 
+import 'input_image.dart';
+
 class MainContainerWidget extends StatefulWidget {
+  const MainContainerWidget({super.key});
+
   @override
   MainContainerWidgetState createState() => MainContainerWidgetState();
 }
@@ -50,13 +54,13 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
     super.initState();
     cameraMode = CameraMacOSMode.photo;
     durationValue = 15;
-    durationController = TextEditingController(text: "$durationValue");
+    durationController = TextEditingController(text: '$durationValue');
     durationController.addListener(() {
       setState(() {
         double? textFieldContent = double.tryParse(durationController.text);
         if (textFieldContent == null) {
           durationValue = 15;
-          durationController.text = "$durationValue";
+          durationController.text = '$durationValue';
         } else {
           durationValue = textFieldContent;
         }
@@ -72,29 +76,33 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
   }
 
   String get cameraButtonText {
-    String label = "Do something";
+    String label = 'Do something';
     switch (cameraMode) {
       case CameraMacOSMode.photo:
-        label = "Take Picture";
+        label = 'Take Picture';
         break;
       case CameraMacOSMode.video:
         if (macOSController?.isRecording ?? false) {
-          label = "Stop recording";
+          label = 'Stop recording';
         } else {
-          label = "Record video";
+          label = 'Record video';
         }
         break;
     }
     return label;
   }
 
-  Future<String> get imageFilePath async => pathJoiner.join(
+  Future<String> get imageFilePath async => path.join(
       (await getApplicationDocumentsDirectory()).path,
-      "P_${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}_${DateTime.now().hour}${DateTime.now().minute}${DateTime.now().second}.${selectedPictureFormat.name.replaceAll("PictureFormat.", "")}");
+      'P_${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}_'
+      '${DateTime.now().hour}${DateTime.now().minute}${DateTime.now().second}.'
+      '${selectedPictureFormat.name.replaceAll('PictureFormat.', '')}');
 
-  Future<String> get videoFilePath async => pathJoiner.join(
+  Future<String> get videoFilePath async => path.join(
       (await getApplicationDocumentsDirectory()).path,
-      "V_${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}_${DateTime.now().hour}${DateTime.now().minute}${DateTime.now().second}.${selectedVideoFormat.name.replaceAll("VideoFormat.", "")}");
+      'V_${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}_'
+      '${DateTime.now().hour}${DateTime.now().minute}${DateTime.now().second}.'
+      '${selectedVideoFormat.name.replaceAll('VideoFormat.', '')}');
 
   @override
   Widget build(BuildContext context) {
@@ -115,8 +123,8 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Video Devices",
+                        const Text(
+                          'Video Devices',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -150,19 +158,19 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                             MaterialButton(
                               color: Colors.lightBlue,
                               textColor: Colors.white,
-                              child: Text("List video devices"),
                               onPressed: listVideoDevices,
+                              child: const Text('List video devices'),
                             ),
                           ],
                         ),
                       ],
                     ),
-                    Divider(),
+                    const Divider(),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Audio Devices",
+                        const Text(
+                          'Audio Devices',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -196,14 +204,14 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                             MaterialButton(
                               color: Colors.lightBlue,
                               textColor: Colors.white,
-                              child: Text("List audio devices"),
                               onPressed: listAudioDevices,
+                              child: const Text('List audio devices'),
                             ),
                           ],
                         ),
                       ],
                     ),
-                    Divider(),
+                    const Divider(),
                     Stack(
                       alignment: Alignment.bottomRight,
                       children: [
@@ -244,7 +252,8 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                                                         },
                                                       )))),
                                           Container(
-                                              margin: EdgeInsets.only(left: 40),
+                                              margin: const EdgeInsets.only(
+                                                  left: 40),
                                               child: CameraMacOSView(
                                                 key: cameraKey,
                                                 deviceId: selectedVideoDevice,
@@ -276,8 +285,8 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                                                   });
                                                 },
                                                 onCameraDestroyed: () {
-                                                  return Text(
-                                                      "Camera Destroyed!");
+                                                  return const Text(
+                                                      'Camera Destroyed!');
                                                 },
                                                 toggleTorch: enableTorch
                                                     ? Torch.on
@@ -287,8 +296,8 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                                                     usePlatformView,
                                               ))
                                         ])))
-                            : Center(
-                                child: Text("Tap on List Devices first"),
+                            : const Center(
+                                child: Text('Tap on List Devices first'),
                               ),
                         lastImagePreviewData != null
                             ? InkWell(
@@ -297,7 +306,7 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                                   decoration: ShapeDecoration(
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
-                                      side: BorderSide(
+                                      side: const BorderSide(
                                         color: Colors.lightBlue,
                                         width: 10,
                                       ),
@@ -313,7 +322,7 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                             : const SizedBox.shrink(),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     if (streamedImage != null)
@@ -330,8 +339,8 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Settings",
+                    const Text(
+                      'Settings',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
@@ -339,10 +348,10 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          "Camera Orientation",
+                        const Text(
+                          'Camera Orientation',
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         SizedBox(
@@ -352,8 +361,8 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                             isExpanded: true,
                             value: selectedOrientation.index.toString(),
                             underline: Container(color: Colors.transparent),
-                            padding: EdgeInsets.only(left: 10),
-                            items: [
+                            padding: const EdgeInsets.only(left: 10),
+                            items: const [
                               DropdownMenuItem(
                                 value: '0',
                                 child: Text('0'),
@@ -384,10 +393,10 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          "Picture Resolution",
+                        const Text(
+                          'Picture Resolution',
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         SizedBox(
@@ -397,8 +406,8 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                             isExpanded: true,
                             value: selectedPictureResolution.index.toString(),
                             underline: Container(color: Colors.transparent),
-                            padding: EdgeInsets.only(left: 10),
-                            items: [
+                            padding: const EdgeInsets.only(left: 10),
+                            items: const [
                               DropdownMenuItem(
                                 value: '0',
                                 child: Text('low'),
@@ -437,10 +446,10 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          "Audio Quality",
+                        const Text(
+                          'Audio Quality',
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         SizedBox(
@@ -450,8 +459,8 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                             isExpanded: true,
                             value: selectedAudioQulaity.index.toString(),
                             underline: Container(color: Colors.transparent),
-                            padding: EdgeInsets.only(left: 10),
-                            items: [
+                            padding: const EdgeInsets.only(left: 10),
+                            items: const [
                               DropdownMenuItem(
                                 value: '0',
                                 child: Text('min'),
@@ -486,10 +495,10 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          "Video Format",
+                        const Text(
+                          'Video Format',
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         SizedBox(
@@ -499,8 +508,8 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                             isExpanded: true,
                             value: selectedVideoFormat.index.toString(),
                             underline: Container(color: Colors.transparent),
-                            padding: EdgeInsets.only(left: 10),
-                            items: [
+                            padding: const EdgeInsets.only(left: 10),
+                            items: const [
                               DropdownMenuItem(
                                 value: '0',
                                 child: Text('mv4'),
@@ -527,10 +536,10 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          "Audio Format",
+                        const Text(
+                          'Audio Format',
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         SizedBox(
@@ -540,7 +549,7 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                             isExpanded: true,
                             value: selectedAudioFormat.index.toString(),
                             underline: Container(color: Colors.transparent),
-                            padding: EdgeInsets.only(left: 10),
+                            padding: const EdgeInsets.only(left: 10),
                             items: add,
                             onChanged: (String? q) {
                               setState(() {
@@ -565,10 +574,10 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                                 tristate: false,
                                 controlAffinity:
                                     ListTileControlAffinity.leading,
-                                title: Text("Enable Audio"),
+                                title: const Text('Enable Audio'),
                                 onChanged: (bool? newValue) {
                                   setState(() {
-                                    this.enableAudio = newValue ?? false;
+                                    enableAudio = newValue ?? false;
                                   });
                                 },
                               ),
@@ -578,11 +587,13 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                                 tristate: false,
                                 controlAffinity:
                                     ListTileControlAffinity.leading,
-                                title: Text(
-                                    "Use Platform View (Experimental - Not Working)"),
+                                title: const Text(
+                                  'Use Platform View '
+                                  '(Experimental - Not Working)',
+                                ),
                                 onChanged: (bool? newValue) {
                                   setState(() {
-                                    this.usePlatformView = newValue ?? false;
+                                    usePlatformView = newValue ?? false;
                                   });
                                 },
                               ),
@@ -592,14 +603,12 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                                 tristate: false,
                                 controlAffinity:
                                     ListTileControlAffinity.leading,
-                                title: Text("Toggle Torch"),
+                                title: const Text('Toggle Torch'),
                                 onChanged: (bool? newValue) {
                                   setState(() {
-                                    this.enableTorch = newValue ?? false;
+                                    enableTorch = newValue ?? false;
                                     macOSController?.toggleTorch(
-                                        !this.enableTorch
-                                            ? Torch.on
-                                            : Torch.off);
+                                        !enableTorch ? Torch.on : Torch.off);
                                   });
                                 },
                               ),
@@ -609,10 +618,10 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                                 tristate: false,
                                 controlAffinity:
                                     ListTileControlAffinity.leading,
-                                title: Text("Mirror video"),
+                                title: const Text('Mirror video'),
                                 onChanged: (bool? newValue) {
                                   setState(() {
-                                    this.isVideoMirrored = newValue ?? false;
+                                    isVideoMirrored = newValue ?? false;
                                     macOSController
                                         ?.setVideoMirrored(isVideoMirrored);
                                   });
@@ -624,11 +633,11 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                                 tristate: false,
                                 controlAffinity:
                                     ListTileControlAffinity.leading,
-                                title: Text("Stream Image"),
+                                title: const Text('Stream Image'),
                                 onChanged: (bool? newValue) {
                                   if (macOSController != null) {
                                     setState(() {
-                                      this.streamImage = newValue ?? false;
+                                      streamImage = newValue ?? false;
 
                                       if (streamImage == true) {
                                         macOSController
@@ -644,64 +653,64 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                                   }
                                 },
                               ),
-                              Text(
-                                "Camera mode",
+                              const Text(
+                                'Camera mode',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              RadioListTile(
-                                title: Text("Photo"),
-                                contentPadding: EdgeInsets.zero,
-                                value: CameraMacOSMode.photo,
+                              RadioGroup<CameraMacOSMode>(
                                 groupValue: cameraMode,
                                 onChanged: (CameraMacOSMode? newMode) {
                                   setState(() {
                                     if (newMode != null) {
-                                      this.cameraMode = newMode;
+                                      cameraMode = newMode;
                                     }
                                   });
                                 },
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: RadioListTile(
+                                child: Column(
+                                  children: [
+                                    const RadioListTile(
+                                      title: Text('Photo'),
                                       contentPadding: EdgeInsets.zero,
-                                      title: Text("Video"),
-                                      value: CameraMacOSMode.video,
-                                      groupValue: cameraMode,
-                                      onChanged: (CameraMacOSMode? newMode) {
-                                        setState(() {
-                                          if (newMode != null) {
-                                            this.cameraMode = newMode;
-                                          }
-                                        });
-                                      },
+                                      value: CameraMacOSMode.photo,
                                     ),
-                                  ),
-                                  Visibility(
-                                    visible:
-                                        cameraMode == CameraMacOSMode.video,
-                                    child: Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 12.0),
-                                        child: TextField(
-                                          controller: durationController,
-                                          decoration: InputDecoration(
-                                            labelText: "Video Length",
+                                    Row(
+                                      children: [
+                                        const Expanded(
+                                          child: RadioListTile(
+                                            contentPadding: EdgeInsets.zero,
+                                            title: Text('Video'),
+                                            value: CameraMacOSMode.video,
                                           ),
                                         ),
-                                      ),
+                                        Visibility(
+                                          visible: cameraMode ==
+                                              CameraMacOSMode.video,
+                                          child: Expanded(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 12.0),
+                                              child: TextField(
+                                                controller: durationController,
+                                                decoration:
+                                                    const InputDecoration(
+                                                  labelText: 'Video Length',
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ],
                           ),
                         ),
-                        Spacer(flex: 10),
+                        const Spacer(flex: 10),
                       ],
                     ),
                     Container(height: 10),
@@ -711,23 +720,23 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                         MaterialButton(
                           color: Colors.red,
                           textColor: Colors.white,
+                          onPressed: destroyCamera,
                           child: Builder(
                             builder: (context) {
-                              String buttonText = "Destroy";
+                              String buttonText = 'Destroy';
                               if (macOSController != null &&
                                   macOSController!.isDestroyed) {
-                                buttonText = "Reinitialize";
+                                buttonText = 'Reinitialize';
                               }
                               return Text(buttonText);
                             },
                           ),
-                          onPressed: destroyCamera,
                         ),
                         MaterialButton(
                           color: Colors.lightBlue,
                           textColor: Colors.white,
-                          child: Text(cameraButtonText),
                           onPressed: onCameraButtonTap,
+                          child: Text(cameraButtonText),
                         ),
                       ],
                     ),
@@ -753,14 +762,14 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
             showAlert(message: exception.toString());
           } else if (result != null) {
             showAlert(
-              title: "SUCCESS",
-              message: "Video saved at ${result.url}",
+              title: 'SUCCESS',
+              message: 'Video saved at ${result.url}',
             );
           }
         },
       );
     } catch (e) {
-      showAlert(message: e.toString());
+      await showAlert(message: e.toString());
     } finally {
       setState(() {});
     }
@@ -779,7 +788,7 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
         }
       });
     } catch (e) {
-      showAlert(message: e.toString());
+      await showAlert(message: e.toString());
     }
   }
 
@@ -796,7 +805,7 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
         }
       });
     } catch (e) {
-      showAlert(message: e.toString());
+      await showAlert(message: e.toString());
     }
   }
 
@@ -821,7 +830,7 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
         }
       }
     } catch (e) {
-      showAlert(message: e.toString());
+      await showAlert(message: e.toString());
     }
   }
 
@@ -836,9 +845,9 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                 lastImagePreviewData = imageData.bytes;
                 savePicture(lastImagePreviewData!);
               });
-              showAlert(
-                title: "SUCCESS",
-                message: "Image successfully created",
+              await showAlert(
+                title: 'SUCCESS',
+                message: 'Image successfully created',
               );
             }
             break;
@@ -850,19 +859,19 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
                 setState(() {
                   lastRecordedVideoData = videoData.bytes;
                 });
-                showAlert(
-                  title: "SUCCESS",
-                  message: "Video saved at ${videoData.url}",
+                await showAlert(
+                  title: 'SUCCESS',
+                  message: 'Video saved at ${videoData.url}',
                 );
               }
             } else {
-              startRecording();
+              await startRecording();
             }
             break;
         }
       }
     } catch (e) {
-      showAlert(message: e.toString());
+      await showAlert(message: e.toString());
     }
   }
 
@@ -873,11 +882,12 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
       if (f.existsSync()) {
         f.deleteSync(recursive: true);
       }
-      f.createSync(recursive: true);
-      f.writeAsBytesSync(photoBytes);
+      f
+        ..createSync(recursive: true)
+        ..writeAsBytesSync(photoBytes);
       lastPictureTaken = f;
     } catch (e) {
-      showAlert(message: e.toString());
+      await showAlert(message: e.toString());
     }
   }
 
@@ -890,7 +900,7 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
         }
       }
     } catch (e) {
-      showAlert(message: e.toString());
+      await showAlert(message: e.toString());
     }
   }
 
@@ -902,27 +912,27 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
         await launchUrl(uriPath);
       }
     } catch (e) {
-      showAlert(message: e.toString());
+      await showAlert(message: e.toString());
     }
   }
 
   void startImageStream() async {
     try {
       if (macOSController != null && !macOSController!.isStreamingImageData) {
-        print("Started streaming");
+        debugPrint('Started streaming');
         setState(() {
           macOSController!.startImageStream(
             (p0) {
-              print(p0.toString());
+              debugPrint(p0.toString());
             },
             onError: (dynamic err) {
-              print(err.toString());
+              debugPrint(err.toString());
             },
           );
         });
       }
     } catch (e) {
-      showAlert(message: e.toString());
+      await showAlert(message: e.toString());
     }
   }
 
@@ -931,19 +941,19 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
       if (macOSController != null && macOSController!.isStreamingImageData) {
         setState(() {
           macOSController!.stopImageStream();
-          print("Stopped streaming");
+          debugPrint('Stopped streaming');
         });
       }
     } catch (e) {
-      showAlert(message: e.toString());
+      await showAlert(message: e.toString());
     }
   }
 
   Future<void> showAlert({
-    String title = "ERROR",
-    String message = "",
+    String title = 'ERROR',
+    String message = '',
   }) async {
-    showDialog(
+    await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -954,7 +964,7 @@ class MainContainerWidgetState extends State<MainContainerWidget> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );

@@ -1,12 +1,13 @@
 import 'dart:async';
-import 'package:camera_macos/camera_macos_arguments.dart';
-import 'package:camera_macos/camera_macos_device.dart';
-import 'package:camera_macos/camera_macos_file.dart';
-import 'package:camera_macos/exceptions.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+import 'camera_macos_arguments.dart';
+import 'camera_macos_device.dart';
+import 'camera_macos_file.dart';
 import 'camera_macos_platform_interface.dart';
+import 'exceptions.dart';
 
 /// An implementation of [CameraMacosPlatform] that uses method channels.
 class MethodChannelCameraMacOS extends CameraMacOSPlatform {
@@ -14,7 +15,7 @@ class MethodChannelCameraMacOS extends CameraMacOSPlatform {
   @visibleForTesting
   final methodChannel = const MethodChannel('camera_macos');
   static const EventChannel eventChannel = EventChannel('camera_macos/stream');
-  StreamSubscription? events;
+  StreamSubscription<void>? events;
 
   bool methodCallHandlerSet = false;
 
@@ -34,13 +35,13 @@ class MethodChannelCameraMacOS extends CameraMacOSPlatform {
           await methodChannel.invokeMapMethod<String, dynamic>(
         'listDevices',
         {
-          "deviceType": deviceType?.index,
+          'deviceType': deviceType?.index,
         },
       );
-      if (args == null || args["devices"] == null) {
-        throw FlutterError("Invalid args: invalid platform response");
+      if (args == null || args['devices'] == null) {
+        throw FlutterError('Invalid args: invalid platform response');
       }
-      List<Map<String, dynamic>> devicesList = List.from(args["devices"] ?? [])
+      List<Map<String, dynamic>> devicesList = List.from(args['devices'] ?? [])
           .map((e) => Map<String, dynamic>.from(e))
           .toList();
       List<CameraMacOSDevice> devices = [];
@@ -54,14 +55,17 @@ class MethodChannelCameraMacOS extends CameraMacOSPlatform {
     }
   }
 
-  /// Call this method to initialize camera. If you implement the widget in your widget tree, this method is useless.
+  /// Call this method to initialize camera. If you implement the widget in
+  /// your widget tree, this method is useless.
   @override
   Future<CameraMacOSArguments?> initialize(
       {
-      /// initialize the camera with a video device. If null, the macOS default camera is chosen
+      /// initialize the camera with a video device. If null, the macOS default
+      /// camera is chosen
       String? deviceId,
 
-      /// initialize the camera with an audio device. If null, the macOS default microphone is chosen
+      /// initialize the camera with an audio device. If null, the macOS
+      /// default microphone is chosen
       String? audioDeviceId,
 
       /// Photo or Video
@@ -94,10 +98,10 @@ class MethodChannelCameraMacOS extends CameraMacOSPlatform {
           await methodChannel.invokeMapMethod<String, dynamic>(
         'initialize',
         {
-          "deviceId": deviceId,
-          "audioDeviceId": audioDeviceId,
-          "type": cameraMacOSMode.index,
-          "enableAudio": enableAudio,
+          'deviceId': deviceId,
+          'audioDeviceId': audioDeviceId,
+          'type': cameraMacOSMode.index,
+          'enableAudio': enableAudio,
           'resolution': resolution.name,
           'quality': audioQuality.name,
           'orientation': orientation.index * 90.0,
@@ -109,14 +113,14 @@ class MethodChannelCameraMacOS extends CameraMacOSPlatform {
         },
       );
       if (result == null) {
-        throw FlutterError("Invalid args: invalid platform response");
+        throw FlutterError('Invalid args: invalid platform response');
       }
-      if (result["error"] != null) {
-        throw result["error"];
+      if (result['error'] != null) {
+        throw result['error'];
       }
       isDestroyed = false;
       List<Map<String, dynamic>> devicesList =
-          List.from(result["devices"] ?? [])
+          List.from(result['devices'] ?? [])
               .map((e) => Map<String, dynamic>.from(e))
               .toList();
       List<CameraMacOSDevice> devices = [];
@@ -125,10 +129,10 @@ class MethodChannelCameraMacOS extends CameraMacOSPlatform {
         devices.add(device);
       }
       return CameraMacOSArguments(
-        textureId: result["textureId"],
+        textureId: result['textureId'],
         size: Size(
-          result["size"]?["width"] ?? 0,
-          result["size"]?["height"] ?? 0,
+          result['size']?['width'] ?? 0,
+          result['size']?['height'] ?? 0,
         ),
         devices: devices,
       );
@@ -147,12 +151,12 @@ class MethodChannelCameraMacOS extends CameraMacOSPlatform {
           .invokeMapMethod<String, dynamic>('takePicture',
               {'format': format.name, 'resolution': resolution.name});
       if (result == null) {
-        throw FlutterError("Invalid result");
+        throw FlutterError('Invalid result');
       }
-      if (result["error"] != null) {
-        throw result["error"];
+      if (result['error'] != null) {
+        throw result['error'];
       } else {
-        return CameraMacOSFile(bytes: result["imageData"] as Uint8List?);
+        return CameraMacOSFile(bytes: result['imageData'] as Uint8List?);
       }
     } catch (e) {
       return Future.error(e);
@@ -165,17 +169,19 @@ class MethodChannelCameraMacOS extends CameraMacOSPlatform {
     /// Max video duration, expressed in seconds
     double? maxVideoDuration,
 
-    /// Enable audio (this flag overrides the initializion parameter of the same name)
+    /// Enable audio (this flag overrides the initializion parameter of the
+    /// same name)
     bool? enableAudio,
 
     /// A URL location to save the video
     String? url,
 
-    /// Called only when the video has reached the max duration pointed by maxVideoDuration
+    /// Called only when the video has reached the max duration pointed by
+    /// maxVideoDuration
     Function(CameraMacOSFile?, CameraMacOSException?)? onVideoRecordingFinished,
   }) async {
     try {
-      registeredCallbacks["onVideoRecordingFinished"] =
+      registeredCallbacks['onVideoRecordingFinished'] =
           onVideoRecordingFinished;
       if (!methodCallHandlerSet) {
         methodChannel.setMethodCallHandler(_genericMethodCallHandler);
@@ -185,16 +191,16 @@ class MethodChannelCameraMacOS extends CameraMacOSPlatform {
           await methodChannel.invokeMapMethod<String, dynamic>(
         'startRecording',
         {
-          "maxVideoDuration": maxVideoDuration,
-          "url": url,
-          "enableAudio": enableAudio,
+          'maxVideoDuration': maxVideoDuration,
+          'url': url,
+          'enableAudio': enableAudio,
         },
       );
       if (result == null) {
-        throw FlutterError("Invalid result");
+        throw FlutterError('Invalid result');
       }
-      if (result["error"] != null) {
-        throw result["error"];
+      if (result['error'] != null) {
+        throw result['error'];
       } else {
         isRecording = true;
         return isRecording;
@@ -212,15 +218,15 @@ class MethodChannelCameraMacOS extends CameraMacOSPlatform {
       final Map<String, dynamic>? result =
           await methodChannel.invokeMapMethod<String, dynamic>('stopRecording');
       if (result == null) {
-        throw FlutterError("Invalid result");
+        throw FlutterError('Invalid result');
       }
-      if (result["error"] != null) {
-        throw result["error"];
+      if (result['error'] != null) {
+        throw result['error'];
       } else {
         isRecording = false;
         return CameraMacOSFile(
-          bytes: result["videoData"] as Uint8List?,
-          url: result["url"] as String?,
+          bytes: result['videoData'] as Uint8List?,
+          url: result['url'] as String?,
         );
       }
     } catch (e) {
@@ -234,7 +240,7 @@ class MethodChannelCameraMacOS extends CameraMacOSPlatform {
   Future<bool?> destroy() async {
     try {
       final bool result = await methodChannel.invokeMethod('destroy') ?? false;
-      events?.cancel();
+      await events?.cancel();
       isDestroyed = result;
       isRecording = false;
       return result;
@@ -245,22 +251,22 @@ class MethodChannelCameraMacOS extends CameraMacOSPlatform {
 
   Future<void> _genericMethodCallHandler(MethodCall call) async {
     switch (call.method) {
-      case "onVideoRecordingFinished":
+      case 'onVideoRecordingFinished':
         isRecording = false;
-        if (registeredCallbacks["onVideoRecordingFinished"] != null) {
+        if (registeredCallbacks['onVideoRecordingFinished'] != null) {
           dynamic args = call.arguments;
           CameraMacOSFile? result;
           CameraMacOSException? exception;
           if (args is Map) {
-            if (args["error"] != null) {
-              exception = CameraMacOSException.fromMap(args["error"]);
+            if (args['error'] != null) {
+              exception = CameraMacOSException.fromMap(args['error']);
             }
             result = CameraMacOSFile(
-              bytes: args["videoData"] as Uint8List?,
-              url: args["url"] as String?,
+              bytes: args['videoData'] as Uint8List?,
+              url: args['url'] as String?,
             );
           }
-          registeredCallbacks["onVideoRecordingFinished"]!(result, exception);
+          registeredCallbacks['onVideoRecordingFinished']!(result, exception);
         }
         break;
       default:
@@ -286,8 +292,8 @@ class MethodChannelCameraMacOS extends CameraMacOSPlatform {
         } else if (onError != null) {
           onError(
             CameraMacOSException(
-              code: "INVALID_FORMAT",
-              message: "Stream data is not in a valid format",
+              code: 'INVALID_FORMAT',
+              message: 'Stream data is not in a valid format',
               details: data,
             ),
           );
@@ -304,8 +310,8 @@ class MethodChannelCameraMacOS extends CameraMacOSPlatform {
       events = null;
     } catch (e) {
       throw CameraMacOSException(
-        code: "CANNOT_STOP_STREAM",
-        message: "Image stream cannot be stopped",
+        code: 'CANNOT_STOP_STREAM',
+        message: 'Image stream cannot be stopped',
         details: e.toString(),
       );
     }
@@ -365,5 +371,51 @@ class MethodChannelCameraMacOS extends CameraMacOSPlatform {
         'isVideoMirrored': isVideoMirrored,
       },
     );
+  }
+
+  /// Check if the current camera has flash/torch support
+  ///
+  /// If [deviceId] is provided, checks flash support for that specific device.
+  /// Otherwise, checks the currently active camera.
+  ///
+  /// Returns true if flash is available, false otherwise.
+  /// Returns false if no camera is initialized or device not found.
+  @override
+  Future<bool> hasFlash({String? deviceId}) async {
+    try {
+      final Map<String, dynamic>? arguments =
+          deviceId != null ? {'deviceId': deviceId} : null;
+
+      final result =
+          await methodChannel.invokeMethod<bool>('hasFlash', arguments);
+      return result ?? false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /// Get camera aspect ratio and resolution
+  ///
+  /// If [deviceId] is provided, gets info for that specific device.
+  /// Otherwise, gets info for the currently active camera.
+  ///
+  /// Returns aspect ratio as double, or null if unavailable.
+  @override
+  Future<double?> getAspectRatio({String? deviceId}) async {
+    try {
+      final Map<String, dynamic>? arguments =
+          deviceId != null ? {'deviceId': deviceId} : null;
+
+      final result = await methodChannel.invokeMethod<Map<String, dynamic>>(
+        'getAspectRatio',
+        arguments,
+      );
+      if (result == null) return null;
+
+      final aspectRatio = result['aspectRatio'] as double?;
+      return aspectRatio;
+    } catch (e) {
+      return null;
+    }
   }
 }

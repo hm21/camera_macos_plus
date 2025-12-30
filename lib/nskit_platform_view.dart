@@ -3,8 +3,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 class NSKitPlatformView extends StatelessWidget {
-  final String viewType;
   const NSKitPlatformView({super.key, required this.viewType});
+  final String viewType;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class NSKitPlatformView extends StatelessWidget {
       surfaceFactory:
           (BuildContext context, PlatformViewController controller) {
         return PlatformViewSurface(
-          gestureRecognizers: {},
+          gestureRecognizers: const {},
           controller: controller,
           hitTestBehavior: PlatformViewHitTestBehavior.opaque,
         );
@@ -29,9 +29,8 @@ class NSKitPlatformView extends StatelessWidget {
 }
 
 class NSKitPlatformViewController extends PlatformViewController {
-  int paramsViewId;
-
   NSKitPlatformViewController({required this.paramsViewId}) : super();
+  int paramsViewId;
 
   @override
   Future<void> clearFocus() async {
@@ -49,5 +48,5 @@ class NSKitPlatformViewController extends PlatformViewController {
   }
 
   @override
-  int get viewId => this.paramsViewId;
+  int get viewId => paramsViewId;
 }

@@ -5,20 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "camera_macos",
+            "name": "camera_macos_plus",
             "request": "launch",
             "type": "dart",
             "args": ["-v"],
         },
         {
-            "name": "camera_macos (profile mode)",
+            "name": "camera_macos_plus (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile",
             "args": ["-v"],
         },
         {
-            "name": "camera_macos (release mode)",
+            "name": "camera_macos_plus (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release",

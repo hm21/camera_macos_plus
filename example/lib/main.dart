@@ -1,6 +1,7 @@
-import 'package:camera_macos_example/main_container_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+
+import 'main_container_widget.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
       ],

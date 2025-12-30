@@ -1,9 +1,9 @@
-import 'package:camera_macos/camera_macos_arguments.dart';
-import 'package:camera_macos/camera_macos_device.dart';
-import 'package:camera_macos/camera_macos_file.dart';
-import 'package:camera_macos/camera_macos_method_channel.dart';
-import 'package:camera_macos/camera_macos_platform_interface.dart';
-import 'package:camera_macos/exceptions.dart';
+import 'package:camera_macos_plus/camera_macos_arguments.dart';
+import 'package:camera_macos_plus/camera_macos_device.dart';
+import 'package:camera_macos_plus/camera_macos_file.dart';
+import 'package:camera_macos_plus/camera_macos_method_channel.dart';
+import 'package:camera_macos_plus/camera_macos_platform_interface.dart';
+import 'package:camera_macos_plus/exceptions.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
@@ -65,37 +65,47 @@ class MockCameraMacOSPlatform
     void Function(CameraImageData) onAvailable, {
     void Function(dynamic)? onError,
   }) async {
-    throw UnimplementedError("");
+    throw UnimplementedError('');
   }
 
   @override
   Future<void> stopImageStream() async {
-    throw UnimplementedError("");
+    throw UnimplementedError('');
   }
 
   @override
   Future<void> setFocusPoint(Offset? point) {
-    throw UnimplementedError("");
+    throw UnimplementedError('');
   }
 
   @override
   Future<void> setZoomLevel(double zoom) {
-    throw UnimplementedError("");
+    throw UnimplementedError('');
   }
 
   @override
   Future<void> setOrientation(CameraOrientation orientation) {
-    throw UnimplementedError("");
+    throw UnimplementedError('');
   }
 
   @override
   Future<void> toggleTorch(Torch torch) {
-    throw UnimplementedError("");
+    throw UnimplementedError('');
   }
 
   @override
   Future<void> setVideoMirrored(bool isVideoMirrored) {
-    throw UnimplementedError("");
+    throw UnimplementedError('');
+  }
+
+  @override
+  Future<double?> getAspectRatio({String? deviceId}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> hasFlash({String? deviceId}) {
+    throw UnimplementedError();
   }
 }
 
