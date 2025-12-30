@@ -7,6 +7,7 @@ class CameraMacosRawView extends StatelessWidget {
     this.usePlatformView = false,
     this.cameraSize,
     this.textureId,
+    this.filterQuality = FilterQuality.low,
     this.onPlatformViewCreated,
   })  : assert(
           !usePlatformView || cameraSize != null,
@@ -20,6 +21,7 @@ class CameraMacosRawView extends StatelessWidget {
   final bool usePlatformView;
   final Size? cameraSize;
   final int? textureId;
+  final FilterQuality filterQuality;
   final Function(int id)? onPlatformViewCreated;
 
   @override
@@ -34,6 +36,6 @@ class CameraMacosRawView extends StatelessWidget {
             },
             creationParamsCodec: const StandardMessageCodec(),
           )
-        : Texture(textureId: textureId!);
+        : Texture(textureId: textureId!, filterQuality: filterQuality);
   }
 }
