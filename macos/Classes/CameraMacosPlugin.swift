@@ -233,16 +233,9 @@ public class CameraMacosPlugin: NSObject, FlutterPlugin, FlutterTexture, AVCaptu
         let zoom = arguments["zoom"] as? Double ?? 1.0
         zoomLevel = zoom
         
-        do {
-            try videoDevice.lockForConfiguration()
-            let maxZoom = videoDevice.activeFormat.videoMaxZoomFactor
-            let newZoom = min(max(zoom, 1.0), Double(maxZoom))
-            videoDevice.videoZoomFactor = CGFloat(newZoom)
-            videoDevice.unlockForConfiguration()
-            result(nil)
-        } catch {
-            result(FlutterError(code: "SET_ZOOM_ERROR", message: error.localizedDescription, details: nil).toFlutterResult)
-        }
+        // videoZoomFactor is not available on macOS
+        // Zoom is handled via manual pixel buffer manipulation in copyPixelBuffer()
+        result(nil)
     }
 
     func hasFlash(_ arguments: Dictionary<String, Any>, _ result: @escaping FlutterResult) {

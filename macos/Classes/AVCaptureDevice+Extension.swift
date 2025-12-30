@@ -23,14 +23,24 @@ extension AVCaptureDevice {
     }
     
     public class func captureDevice(mediaType: AVMediaType) -> AVCaptureDevice? {
-        return AVCaptureDevice.devices(for: mediaType).first
+        if #available(macOS 10.15, *) {
+            let deviceTypes: [AVCaptureDevice.DeviceType] = [.builtInWideAngleCamera, .externalUnknown]
+            return AVCaptureDevice.DiscoverySession(deviceTypes: deviceTypes, mediaType: mediaType, position: .unspecified).devices.first
+        } else {
+            return AVCaptureDevice.default(for: mediaType)
+        }
     }
     
     public class func captureDevices(mediaType: AVMediaType? = nil) -> [AVCaptureDevice] {
-        if let mediaType = mediaType {
-            return AVCaptureDevice.devices(for: mediaType)
+        if #available(macOS 10.15, *) {
+            let deviceTypes: [AVCaptureDevice.DeviceType] = [.builtInWideAngleCamera, .externalUnknown]
+            return AVCaptureDevice.DiscoverySession(deviceTypes: deviceTypes, mediaType: mediaType, position: .unspecified).devices
         } else {
-            return AVCaptureDevice.devices()
+            if let mediaType = mediaType {
+                return AVCaptureDevice.devices(for: mediaType)
+            } else {
+                return AVCaptureDevice.devices()
+            }
         }
     }
     
