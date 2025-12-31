@@ -1044,7 +1044,7 @@ public class CameraMacosPlugin: NSObject, FlutterPlugin, FlutterTexture, AVCaptu
         self.videoDevice = nil
         self.textureId = nil
         
-        result(true)
+        result(["success": true])
         
     }
     

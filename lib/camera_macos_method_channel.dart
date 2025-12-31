@@ -239,11 +239,18 @@ class MethodChannelCameraMacOS extends CameraMacOSPlatform {
   @override
   Future<bool?> destroy() async {
     try {
-      final bool result = await methodChannel.invokeMethod('destroy') ?? false;
+      final Map<String, dynamic>? result =
+          await methodChannel.invokeMapMethod<String, dynamic>('destroy');
       await events?.cancel();
-      isDestroyed = result;
+
+      if (result != null && result['error'] != null) {
+        throw result['error'];
+      }
+
+      final bool success = result?['success'] ?? false;
+      isDestroyed = success;
       isRecording = false;
-      return result;
+      return success;
     } catch (e) {
       return Future.error(e);
     }

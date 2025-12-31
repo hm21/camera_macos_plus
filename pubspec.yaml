@@ -1,6 +1,6 @@
 name: camera_macos_plus
 description: macOS camera package implementation. Supports both internal and external cameras, can take pictures and record video with audio as well.
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/hm21/camera_macos_plus/
 repository: https://github.com/hm21/camera_macos_plus/
 documentation: https://github.com/hm21/camera_macos_plus/
