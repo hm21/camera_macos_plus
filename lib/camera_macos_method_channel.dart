@@ -22,6 +22,12 @@ class MethodChannelCameraMacOS extends CameraMacOSPlatform {
   bool isRecording = false;
   bool isDestroyed = false;
 
+  /// The last initialized texture ID
+  int? lastTextureId;
+
+  /// The last initialized camera size
+  Size? lastCameraSize;
+
   Map<String, Function?> registeredCallbacks = {};
 
   bool get isStreamingImageData => events != null && !events!.isPaused;
@@ -119,6 +125,11 @@ class MethodChannelCameraMacOS extends CameraMacOSPlatform {
         throw result['error'];
       }
       isDestroyed = false;
+      lastTextureId = result['textureId'];
+      lastCameraSize = Size(
+        result['size']?['width']?.toDouble() ?? 0,
+        result['size']?['height']?.toDouble() ?? 0,
+      );
       List<Map<String, dynamic>> devicesList =
           List.from(result['devices'] ?? [])
               .map((e) => Map<String, dynamic>.from(e))
@@ -129,11 +140,8 @@ class MethodChannelCameraMacOS extends CameraMacOSPlatform {
         devices.add(device);
       }
       return CameraMacOSArguments(
-        textureId: result['textureId'],
-        size: Size(
-          result['size']?['width'] ?? 0,
-          result['size']?['height'] ?? 0,
-        ),
+        textureId: lastTextureId,
+        size: lastCameraSize ?? Size.zero,
         devices: devices,
       );
     } catch (e) {
@@ -250,6 +258,10 @@ class MethodChannelCameraMacOS extends CameraMacOSPlatform {
       final bool success = result?['success'] ?? false;
       isDestroyed = success;
       isRecording = false;
+      if (success) {
+        lastTextureId = null;
+        lastCameraSize = null;
+      }
       return success;
     } catch (e) {
       return Future.error(e);

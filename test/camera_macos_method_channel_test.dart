@@ -14,6 +14,29 @@ void main() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(channel, (MethodCall methodCall) async {
       switch (methodCall.method) {
+        case 'initialize':
+          return <String, dynamic>{
+            'textureId': 1,
+            'size': {'width': 1920.0, 'height': 1080.0},
+            'devices': <Map<String, dynamic>>[],
+          };
+        case 'takePicture':
+          return <String, dynamic>{
+            'imageData': Uint8List.fromList([0, 1, 2, 3, 4, 5]),
+          };
+        case 'startRecording':
+          return <String, dynamic>{
+            'success': true,
+          };
+        case 'stopRecording':
+          return <String, dynamic>{
+            'videoData': Uint8List.fromList([0, 1, 2, 3, 4, 5]),
+            'url': '/tmp/video.mp4',
+          };
+        case 'destroy':
+          return <String, dynamic>{
+            'success': true,
+          };
         case 'onVideoRecordingFinished':
           dynamic args = methodCall.arguments;
           expect(args, isNot(null));
@@ -21,9 +44,9 @@ void main() {
           expect(args['videoData'], isA<Uint8List>());
           break;
         default:
-          break;
+          return null;
       }
-      return;
+      return null;
     });
   });
 
